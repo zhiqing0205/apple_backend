@@ -1,6 +1,5 @@
 import requests
 from django.http import JsonResponse
-import chardet
 
 from apps.apple.models import AppleCapacity, AppleConsumption, AppleProduction, FruitPrice, AppleEfficiency
 
