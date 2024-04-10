@@ -1,7 +1,8 @@
 import requests
 from django.http import JsonResponse
 import chardet
-from apps.apple.models import AppleCapacity, AppleConsumption, AppleProduction, FruitPrice
+
+from apps.apple.models import AppleCapacity, AppleConsumption, AppleProduction, FruitPrice, AppleEfficiency
 
 
 def crawl_apple_production_data():
@@ -46,7 +47,6 @@ def crawl_apple_capacity_data():
     apple_capacity_data = response.json()
     AppleCapacity.objects.all().delete()
     for province, capacity in zip(apple_capacity_data["14"][0][1:], apple_capacity_data["14"][1][1:]):
-        province = province.encode('utf-8').decode('utf-8')
         try:
             AppleCapacity.objects.create(province=province, capacity=capacity)
         except Exception as e:
@@ -66,11 +66,25 @@ def crawl_apple_consumption_data():
             print(e)
 
 
+def crawl_apple_efficiency_data():
+    url = 'http://daping.agdata.cn/Api4Datas/getDatas/7'
+    response = requests.get(url)
+    response.encoding = 'utf-8'
+    apple_efficiency_data = response.json()
+    AppleEfficiency.objects.all().delete()
+    for country, efficiency in zip(apple_efficiency_data["5"][0][1:], apple_efficiency_data["5"][1][1:]):
+        try:
+            AppleEfficiency.objects.create(country=country, efficiency=efficiency)
+        except Exception as e:
+            print(e)
+
+
 def crawl_data(request):
     crawl_apple_production_data()
     crawl_fruit_price_data()
     crawl_apple_capacity_data()
     crawl_apple_consumption_data()
+    crawl_apple_efficiency_data()
 
     return JsonResponse({'message': '数据爬取成功'})
 
@@ -82,6 +96,7 @@ def get_data(request):
     fruit_price = FruitPrice.objects.all()
     times = set([price.time for price in fruit_price])
     fruits = set([price.fruit for price in fruit_price])
+    apple_efficiency = [apple_efficiency.to_dict() for apple_efficiency in AppleEfficiency.objects.all()]
 
     return JsonResponse({
         'apple_production': {
@@ -107,5 +122,6 @@ def get_data(request):
                 }
                 for fruit in fruits
             ]
-        }
+        },
+        'apple_efficiency': apple_efficiency
     })
