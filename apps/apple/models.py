@@ -86,3 +86,23 @@ class FruitPrice(models.Model):
             'fruit': self.fruit,
             'price': self.price
         }
+
+
+class AppleEfficiency(models.Model):
+    id = models.AutoField(primary_key=True)
+    country = models.CharField(max_length=50, verbose_name='国家', unique=True)
+    efficiency = models.IntegerField(verbose_name='效率')
+
+    class Meta:
+        db_table = 'tb_apple_efficiency'
+        verbose_name = '苹果效率'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return f'{self.country}：{self.efficiency}千克/公顷'
+
+    def to_dict(self):
+        return {
+            'country': self.country,
+            'efficiency': self.efficiency
+        }
