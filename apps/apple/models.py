@@ -34,7 +34,7 @@ class AppleConsumption(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return f'{self.country}：{self.consumption}吨'
+        return f'{self.country}：{self.consumption}千克'
 
     def to_dict(self):
         return {
@@ -45,7 +45,7 @@ class AppleConsumption(models.Model):
 
 class AppleProduction(models.Model):
     id = models.AutoField(primary_key=True)
-    year = models.IntegerField(verbose_name='年份')
+    year = models.IntegerField(verbose_name='年份', unique=True)
     production = models.IntegerField(verbose_name='产量')
     global_production = models.IntegerField(verbose_name='全球产量')
 
@@ -78,7 +78,7 @@ class FruitPrice(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return f'{self.time}：{self.fruit}：{self.price}元/斤'
+        return f'{self.time}：{self.fruit}：{self.price}元/千克'
 
     def to_dict(self):
         return {
