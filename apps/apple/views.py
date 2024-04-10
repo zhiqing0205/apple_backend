@@ -105,14 +105,8 @@ def get_data(request):
             'global_productions': [production['global_production'] for production in apple_production],
             'ratios': [production['ratio'] for production in apple_production]
         },
-        'apple_capacity': {
-            'provinces': [capacity['province'] for capacity in apple_capacity],
-            'capacities': [capacity['capacity'] for capacity in apple_capacity]
-        },
-        'apple_consumption': {
-            'countries': [consumption['country'] for consumption in apple_consumption],
-            'consumptions': [consumption['consumption'] for consumption in apple_consumption]
-        },
+        'apple_capacity': apple_capacity,
+        'apple_consumption': apple_consumption,
         'fruit_price': {
             'times': list(times),
             'fruits': [
