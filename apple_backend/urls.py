@@ -20,5 +20,6 @@ from apps.apple import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('crawl_data/', views.crawl_data)
+    path('crawl_data/', views.crawl_data),
+    path('get_data/', views.get_data),
 ]

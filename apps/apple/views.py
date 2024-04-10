@@ -73,3 +73,39 @@ def crawl_data(request):
     crawl_apple_consumption_data()
 
     return JsonResponse({'message': '数据爬取成功'})
+
+
+def get_data(request):
+    apple_production = [apple_production.to_dict() for apple_production in AppleProduction.objects.all()]
+    apple_capacity = [apple_capacity.to_dict() for apple_capacity in AppleCapacity.objects.all()]
+    apple_consumption = [apple_consumption.to_dict() for apple_consumption in AppleConsumption.objects.all()]
+    fruit_price = FruitPrice.objects.all()
+    times = set([price.time for price in fruit_price])
+    fruits = set([price.fruit for price in fruit_price])
+
+    return JsonResponse({
+        'apple_production': {
+            'years': [production['year'] for production in apple_production],
+            'productions': [production['production'] for production in apple_production],
+            'global_productions': [production['global_production'] for production in apple_production],
+            'ratios': [production['ratio'] for production in apple_production]
+        },
+        'apple_capacity': {
+            'provinces': [capacity['province'] for capacity in apple_capacity],
+            'capacities': [capacity['capacity'] for capacity in apple_capacity]
+        },
+        'apple_consumption': {
+            'countries': [consumption['country'] for consumption in apple_consumption],
+            'consumptions': [consumption['consumption'] for consumption in apple_consumption]
+        },
+        'fruit_price': {
+            'times': list(times),
+            'fruits': [
+                {
+                    'label': fruit,
+                    'data': [float(price.price) for price in fruit_price if price.fruit == fruit]
+                }
+                for fruit in fruits
+            ]
+        }
+    })
