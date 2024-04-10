@@ -30,7 +30,7 @@ def crawl_fruit_price_data():
     for i in range(1, len(fruit_price_data)):
         fruit = fruit_price_data[i][0]
         for j, price in enumerate(fruit_price_data[i][1:]):
-            time = fruit_price_data[0][j]
+            time = fruit_price_data[0][j + 1]
             fruit_price_instances.append(FruitPrice(time=time, fruit=fruit, price=price))
 
     try:
